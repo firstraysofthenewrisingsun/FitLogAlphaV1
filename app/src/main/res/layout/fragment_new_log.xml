@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".NewLogFragment">
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <!-- TODO: Update blank fragment layout -->
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="469dp"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <TextView
@@ -28,9 +28,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Enter lift name"
-            android:inputType="textPersonName"
+            android:hint="Log Name"
+            android:inputType="text"
             android:textAlignment="center" />
+
         <com.mikhaellopez.lazydatepicker.LazyDatePicker
             android:id="@+id/lazyDatePicker"
             android:layout_width="match_parent"
@@ -44,10 +45,15 @@
 
         </com.mikhaellopez.lazydatepicker.LazyDatePicker>
 
-        <jp.wasabeef.richeditor.RichEditor
-            android:id="@+id/richEditor"
+        <EditText
+            android:id="@+id/edttxtNotes1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"></jp.wasabeef.richeditor.RichEditor>
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Notes"
+            android:inputType="textMultiLine"
+            android:textAlignment="center" />
+
     </LinearLayout>
 
     <com.wangjie.rapidfloatingactionbutton.RapidFloatingActionLayout xmlns:rfal="http://schemas.android.com/apk/res-auto"

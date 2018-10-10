@@ -51,7 +51,7 @@ public class LogActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+
 
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         binding.viewPager2.setAdapter(mPagerAdapter);
@@ -103,7 +103,7 @@ public class LogActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.fade_out);
     }
 
 

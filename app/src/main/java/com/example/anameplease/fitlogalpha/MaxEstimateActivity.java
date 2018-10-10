@@ -30,14 +30,9 @@ import com.wangjie.rapidfloatingactionbutton.util.RFABTextUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MaxEstimateActivity extends AppCompatActivity implements RapidFloatingActionContentLabelList.OnRapidFloatingActionContentLabelListListener {
+public class MaxEstimateActivity extends AppCompatActivity {
 
     private ActivityMaxEstimateBinding binding;
-
-    private RapidFloatingActionLayout rfaLayout;
-    private RapidFloatingActionButton rfaBtn;
-    private RapidFloatingActionHelper rfabHelper;
-
 
 
     private appFunc heyump = new appFunc();
@@ -56,40 +51,9 @@ public class MaxEstimateActivity extends AppCompatActivity implements RapidFloat
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
 
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         binding.viewPager2.setAdapter(mPagerAdapter);
-
-        rfaLayout = binding.activityLogRfal;
-        rfaBtn = binding.activityLogRfab;
-
-        RapidFloatingActionContentLabelList rfaContent = new RapidFloatingActionContentLabelList(this);
-        rfaContent.setOnRapidFloatingActionContentLabelListListener(this);
-        List<RFACLabelItem> items = new ArrayList<>();
-
-        items.add(new RFACLabelItem<Integer>().setLabel("Calculate Upper Max")
-                .setResId(R.mipmap.ic_launcher)
-                .setWrapper(1));
-
-        items.add(new RFACLabelItem<Integer>().setLabel("Calculate Lower Max")
-                .setResId(R.mipmap.ic_launcher)
-                .setWrapper(2));
-
-
-        rfaContent
-                .setItems(items)
-                .setIconShadowRadius(RFABTextUtil.dip2px(this, 5))
-                .setIconShadowColor(0xff888888)
-                .setIconShadowDy(RFABTextUtil.dip2px(this, 5))
-        ;
-
-        rfabHelper = new RapidFloatingActionHelper(
-                this,
-                rfaLayout,
-                rfaBtn,
-                rfaContent
-        ).build();
 
     }
 
@@ -111,31 +75,6 @@ public class MaxEstimateActivity extends AppCompatActivity implements RapidFloat
                 return onOptionsItemSelected(item);
         }
     }
-
-    @Override
-    public void onRFACItemLabelClick(int position, RFACLabelItem item) {
-
-        switch(item.getLabel()){
-            case "Calculate Upper Max":
-
-                break;
-
-            case "Calculate Lower Max":
-
-
-                break;
-
-
-        }
-
-    }
-
-    @Override
-    public void onRFACItemIconClick(int position, RFACLabelItem item) {
-
-
-    }
-
 
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
         public ScreenSlidePagerAdapter(FragmentManager fm) {
@@ -159,7 +98,7 @@ public class MaxEstimateActivity extends AppCompatActivity implements RapidFloat
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.fade_out);
     }
 
 

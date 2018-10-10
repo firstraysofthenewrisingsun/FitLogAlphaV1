@@ -166,7 +166,7 @@ public class EditLogFragment extends Fragment implements RapidFloatingActionCont
                             public void onChoosePath(String path, File pathFile) {
 
                                String date = binding.lazyDatePicker.getDate().toString()+"\n";
-                               String note = binding.richEditor.getHtml()+"\n";
+                               String note = binding.edttxtNotes.getText().toString()+"\n";
                                String append = date + note;
                                heyump.appendFile(pathFile, append);
 

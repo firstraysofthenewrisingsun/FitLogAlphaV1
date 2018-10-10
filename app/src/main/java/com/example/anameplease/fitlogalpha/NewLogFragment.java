@@ -156,7 +156,7 @@ public class NewLogFragment extends Fragment implements RapidFloatingActionConte
             case "Save":
                 name = "Log "+binding.editText3.getText().toString()+"\n";
                 date = binding.lazyDatePicker.getDate().toString()+"\n";
-                note = binding.richEditor.getHtml()+"\n";
+                note = binding.edttxtNotes1.getText().toString()+"\n";
                 heyump.writeToSDFile(name, date, note, name, root);
 
                 break;
