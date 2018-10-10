@@ -113,6 +113,23 @@ public class EditLogFragment extends Fragment implements RapidFloatingActionCont
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReferenceFromUrl("gs://fitlogalpha.appspot.com/LogContainer");
 
+        binding.btnToggle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.expandableTextView.setInterpolator(new OvershootInterpolator());
+
+                if (binding.expandableTextView.isExpanded())
+                {
+                    binding.expandableTextView.collapse();
+                }
+                else
+                {
+                    binding.expandableTextView.expand();
+                }
+
+            }
+        });
+
         rfaLayout = binding.activityLogRfal;
         rfaBtn = binding.activityLogRfab;
 
@@ -130,9 +147,6 @@ public class EditLogFragment extends Fragment implements RapidFloatingActionCont
         items.add(new RFACLabelItem<Integer>().setLabel("View")
                 .setResId(R.mipmap.ic_launcher)
                 .setWrapper(3));
-        items.add(new RFACLabelItem<Integer>().setLabel("Toggle")
-                .setResId(R.mipmap.ic_launcher)
-                .setWrapper(4));
         items.add(new RFACLabelItem<Integer>().setLabel("Clear")
                 .setResId(R.mipmap.ic_launcher)
                 .setWrapper(4));
@@ -215,21 +229,6 @@ public class EditLogFragment extends Fragment implements RapidFloatingActionCont
                         })
                         .build()
                         .show();
-                break;
-
-            case "Toggle":
-
-                binding.expandableTextView.setInterpolator(new OvershootInterpolator());
-
-                if (binding.expandableTextView.isExpanded())
-                {
-                    binding.expandableTextView.collapse();
-                }
-                else
-                {
-                    binding.expandableTextView.expand();
-                }
-
                 break;
 
             case "Clear":
