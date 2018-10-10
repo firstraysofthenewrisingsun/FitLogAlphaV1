@@ -27,10 +27,11 @@ public class appFunc {
 
     }
 
-    public static String lowerCalc(double a, Context context){
+    public String lowerCalc(double a, Context context){
         Double answ1 =(a*1.09703) + 14.2546;
+        Double check = null;
 
-        if(!(answ1== null)){
+        if(answ1 == check){
 
             Toast toast = Toast.makeText(context.getApplicationContext(), "Please enter some data", Toast.LENGTH_LONG);
             toast.show();
@@ -43,10 +44,11 @@ public class appFunc {
         return result;
     }
 
-    public static String upperCalc(double b, Context context){
+    public String upperCalc(double b, Context context){
         Double answ = (b*1.1307) + 0.6998;
+        Double check = null;
 
-        if(!(answ== null)){
+        if(answ == check){
 
             Toast toast = Toast.makeText(context.getApplicationContext(), "Please enter some data", Toast.LENGTH_LONG);
             toast.show();
