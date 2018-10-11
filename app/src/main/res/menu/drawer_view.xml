@@ -3,11 +3,11 @@
 <group android:checkableBehavior="single">
     <item
         android:id="@+id/max_estimate1"
-        android:icon="@mipmap/main_logo"
+        android:icon="@mipmap/ic_launcher_round"
         android:title="Max Estimate"/>
     <item
         android:id="@+id/new_log1"
-        android:icon="@mipmap/main_logo"
+        android:icon="@mipmap/ic_launcher_round"
         android:title="Logs"/>
 </group>
 </menu>

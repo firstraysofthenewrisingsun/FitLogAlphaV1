@@ -27,7 +27,7 @@
         <at.blogc.android.views.ExpandableTextView
             android:id="@+id/expandableTextView"
             android:layout_width="match_parent"
-            android:layout_height="214dp"
+            android:layout_height="140dp"
             android:layout_marginStart="2dp"
             android:layout_marginEnd="2dp"
             android:layout_marginBottom="7dp"
