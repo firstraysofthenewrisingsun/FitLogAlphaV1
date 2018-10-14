@@ -9,5 +9,9 @@
         android:id="@+id/new_log1"
         android:icon="@mipmap/ic_launcher_round"
         android:title="Logs"/>
+    <item
+        android:id="@+id/fit_util1"
+        android:icon="@mipmap/ic_launcher_round"
+        android:title="Fitness Utilities"/>
 </group>
 </menu>

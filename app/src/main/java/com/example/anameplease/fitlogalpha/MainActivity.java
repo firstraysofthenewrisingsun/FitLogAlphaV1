@@ -49,7 +49,10 @@ public class MainActivity extends AppCompatActivity {
                         Intent intent3 = new Intent(MainActivity.this, LogActivity.class);
                         startActivity(intent3);
                         return true;
-
+                    case R.id.fit_util1:
+                        Intent intent4 = new Intent(MainActivity.this, FitUtilActivity.class);
+                        startActivity(intent4);
+                        return true;
                 }
 
 

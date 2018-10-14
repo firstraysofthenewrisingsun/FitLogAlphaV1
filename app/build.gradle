@@ -41,6 +41,7 @@ dependencies {
     implementation 'at.blogc:expandabletextview:1.0.5'
 
 
+
 }
 
 apply plugin: 'com.google.gms.google-services'

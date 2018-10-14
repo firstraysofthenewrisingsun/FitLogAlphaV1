@@ -25,7 +25,8 @@
                 android:value="com.example.anameplease.fitlogalpha.MainActivity" />
         </activity>
         <activity android:name=".MaxEstimateActivity" />
-        <activity android:name=".LogActivity"></activity>
+        <activity android:name=".LogActivity" />
+        <activity android:name=".FitUtilActivity"></activity>
     </application>
 
 </manifest>
