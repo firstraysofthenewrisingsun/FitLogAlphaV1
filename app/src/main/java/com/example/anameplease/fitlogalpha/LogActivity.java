@@ -1,7 +1,10 @@
 package com.example.anameplease.fitlogalpha;
 
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -14,15 +17,28 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import com.example.anameplease.fitlogalpha.databinding.ActivityLogBinding;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.obsez.android.lib.filechooser.ChooserDialog;
+import com.wangjie.rapidfloatingactionbutton.RapidFloatingActionButton;
+import com.wangjie.rapidfloatingactionbutton.RapidFloatingActionHelper;
+import com.wangjie.rapidfloatingactionbutton.RapidFloatingActionLayout;
+import com.wangjie.rapidfloatingactionbutton.contentimpl.labellist.RFACLabelItem;
+import com.wangjie.rapidfloatingactionbutton.contentimpl.labellist.RapidFloatingActionContentLabelList;
+import com.wangjie.rapidfloatingactionbutton.util.RFABTextUtil;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
-public class LogActivity extends AppCompatActivity {
+public class LogActivity extends AppCompatActivity{
 
     private FirebaseStorage storage;
     private StorageReference storageReference;
@@ -41,6 +57,10 @@ public class LogActivity extends AppCompatActivity {
     private appFunc heyump = new appFunc();
 
     private ActivityLogBinding binding;
+    private Context context;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +80,7 @@ public class LogActivity extends AppCompatActivity {
 
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReferenceFromUrl("gs://fitlogalpha.appspot.com/LogContainer");
+
     }
 
     @Override
@@ -80,6 +101,8 @@ public class LogActivity extends AppCompatActivity {
                 return onOptionsItemSelected(item);
         }
     }
+
+
 
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
         public ScreenSlidePagerAdapter(FragmentManager fm) {
@@ -105,6 +128,5 @@ public class LogActivity extends AppCompatActivity {
         super.onBackPressed();
         overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.fade_out);
     }
-
 
 }

@@ -26,7 +26,9 @@
         </activity>
         <activity android:name=".MaxEstimateActivity" />
         <activity android:name=".LogActivity" />
-        <activity android:name=".FitUtilActivity"></activity>
+        <activity android:name=".FitUtilActivity" />
+        <activity android:name=".NoteListActivity" />
+        <activity android:name=".LogCreator"></activity>
     </application>
 
 </manifest>

@@ -53,6 +53,14 @@ public class MainActivity extends AppCompatActivity {
                         Intent intent4 = new Intent(MainActivity.this, FitUtilActivity.class);
                         startActivity(intent4);
                         return true;
+                    case R.id.logView1:
+                        Intent intent5 = new Intent(MainActivity.this, NoteListActivity.class);
+                        startActivity(intent5);
+                        return true;
+                    case R.id.new_log2:
+                        Intent intent6 = new Intent(MainActivity.this, LogCreator.class);
+                        startActivity(intent6);
+                        return true;
                 }
 
 

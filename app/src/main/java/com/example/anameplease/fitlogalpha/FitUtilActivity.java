@@ -16,6 +16,9 @@ import android.view.MenuItem;
 
 import com.example.anameplease.fitlogalpha.databinding.ActivityFitUtilBinding;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FitUtilActivity extends AppCompatActivity {
 
     private ActivityFitUtilBinding binding;
@@ -23,6 +26,8 @@ public class FitUtilActivity extends AppCompatActivity {
     private static final int NUM_PAGES = 1;
 
     private PagerAdapter mPagerAdapter;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

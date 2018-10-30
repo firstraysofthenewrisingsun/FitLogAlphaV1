@@ -233,6 +233,8 @@ public class EditLogFragment extends Fragment implements RapidFloatingActionCont
 
             case "Clear":
                 binding.expandableTextView.setText("");
+                binding.edttxtNotes.clearComposingText();
+                binding.lazyDatePicker.clear();
 
                 break;
 

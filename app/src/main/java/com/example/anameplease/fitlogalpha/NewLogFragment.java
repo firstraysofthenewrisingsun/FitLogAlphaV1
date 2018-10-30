@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -154,8 +155,8 @@ public class NewLogFragment extends Fragment implements RapidFloatingActionConte
 
         switch(item.getLabel()){
             case "Save":
-                name = "Log "+binding.editText3.getText().toString()+"\n";
-                date = binding.lazyDatePicker.getDate().toString()+"\n";
+                name = "Log " +binding.editText3.getText().toString();
+                date = "\n"+binding.lazyDatePicker.getDate().toString()+"\n";
                 note = binding.edttxtNotes1.getText().toString()+"\n";
                 heyump.writeToSDFile(name, date, note, name, root);
 
@@ -205,6 +206,8 @@ public class NewLogFragment extends Fragment implements RapidFloatingActionConte
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                Toast toast = Toast.makeText(getContext(), "Nope", Toast.LENGTH_LONG);
+                toast.show();
 
             }
         });
