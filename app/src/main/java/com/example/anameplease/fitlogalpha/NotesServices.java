@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ public class NotesServices extends AsyncTask<Notes, Void, Notes> {
     private Integer id;
 
     private Notes newnote;
+    private appFunc func = new appFunc();
 
 
     public  NotesServices(Context context){
@@ -61,6 +63,18 @@ public class NotesServices extends AsyncTask<Notes, Void, Notes> {
         return  notes;
     }
 
+    public void appendData(Context context, String data, Notes item){
+        func.conCat(data, item);
+        db.notesDao().updateNote(item);
+        Toast.makeText(context.getApplicationContext(), item.getNote(), Toast.LENGTH_LONG).show();
+    }
+
+    public void deleteNote(Notes item){
+
+        db.notesDao().delete(item);
+
+    }
+
     public void updateNotes(Notes notes){
         db.notesDao().updateNote(notes);
     }
@@ -72,6 +86,7 @@ public class NotesServices extends AsyncTask<Notes, Void, Notes> {
         db.notesDao().insert(notes[0]);
 
         Notes notes1 = db.notesDao().searchByID(id);
+
 
         return notes1;
     }

@@ -7,6 +7,7 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import java.io.File;
 import java.io.Serializable;
 
 @Entity (tableName = "notes")
@@ -21,16 +22,16 @@ public class Notes implements Serializable {
     private String name;
 
 
-    @Ignore
     @ColumnInfo (name = "info_date")
     private int date;
 
-    @Ignore
+
     @ColumnInfo (name = "info_note")
     private String note;
 
 
 
+    @Ignore
     public Notes(){
 
     }

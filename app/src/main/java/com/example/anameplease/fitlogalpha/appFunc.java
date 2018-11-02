@@ -132,7 +132,7 @@ public class appFunc {
 
     }
 
-    public void writeToSDFile(String n, String d, String fleNme, File root){
+    public void writeToSDFile(String n, String fleNme, File root){
 
         // Find the root of the external storage.
         // See http://developer.android.com/guide/topics/data/data-  storage.html#filesExternal
@@ -150,7 +150,6 @@ public class appFunc {
             FileOutputStream f = new FileOutputStream(file);
             PrintWriter pw = new PrintWriter(f);
             pw.println(n);
-            pw.println(d);
             pw.flush();
             pw.close();
             f.close();
@@ -177,6 +176,13 @@ public class appFunc {
             Log.e(TAG, "Error getting bitmap", e);
         }
         return bm;
+    }
+
+    public void conCat(String data, Notes notes){
+
+        String myConcatedString = notes.getNote().concat("\n").concat(data);
+
+        notes.setNote(myConcatedString);
     }
 
 

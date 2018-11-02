@@ -7,6 +7,7 @@ import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 import android.provider.ContactsContract;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,7 @@ public interface NotesDao {
 
     @Query("SELECT * FROM notes WHERE info_id =:selectedID")
     Notes searchByID(Integer selectedID);
+
 
 
     @Update

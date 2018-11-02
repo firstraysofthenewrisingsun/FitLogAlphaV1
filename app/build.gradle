@@ -48,6 +48,8 @@ dependencies {
     annotationProcessor "android.arch.persistence.room:compiler:$room_version"
 
 
+
+    implementation 'com.google.firebase:firebase-database:16.0.4'
 }
 
 apply plugin: 'com.google.gms.google-services'

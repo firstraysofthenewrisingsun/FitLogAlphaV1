@@ -44,11 +44,6 @@ public class MainActivity extends AppCompatActivity {
                         Intent intent2 = new Intent(MainActivity.this, MaxEstimateActivity.class);
                         startActivity(intent2);
                         return true;
-
-                    case R.id.new_log1:
-                        Intent intent3 = new Intent(MainActivity.this, LogActivity.class);
-                        startActivity(intent3);
-                        return true;
                     case R.id.fit_util1:
                         Intent intent4 = new Intent(MainActivity.this, FitUtilActivity.class);
                         startActivity(intent4);
