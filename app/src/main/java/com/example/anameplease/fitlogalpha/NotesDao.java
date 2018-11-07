@@ -23,7 +23,8 @@ public interface NotesDao {
     @Query("SELECT * FROM notes WHERE info_id =:selectedID")
     Notes searchByID(Integer selectedID);
 
-
+    @Query("SELECT * FROM notes WHERE info_id =:checkedID")
+    List<Notes> getAllByID(Integer checkedID);
 
     @Update
     void updateNote (Notes item);

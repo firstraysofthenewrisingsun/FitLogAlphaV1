@@ -7,13 +7,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.OvershootInterpolator;
 import android.widget.Toast;
 
-import com.example.anameplease.fitlogalpha.databinding.FragmentEditLogBinding;
+import com.example.anameplease.fitlogalpha.databinding.FragmentAppendNoteBinding;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -34,10 +34,10 @@ import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link EditLogFragment#newInstance} factory method to
+ * Use the {@link AppendNoteFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EditLogFragment extends Fragment implements RapidFloatingActionContentLabelList.OnRapidFloatingActionContentLabelListListener{
+public class AppendNoteFragment extends Fragment implements RapidFloatingActionContentLabelList.OnRapidFloatingActionContentLabelListListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -46,16 +46,13 @@ public class EditLogFragment extends Fragment implements RapidFloatingActionCont
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
-    private FragmentEditLogBinding binding;
+    private FragmentAppendNoteBinding binding;
 
     private RapidFloatingActionLayout rfaLayout;
     private RapidFloatingActionButton rfaBtn;
     private RapidFloatingActionHelper rfabHelper;
 
     private appFunc heyump = new appFunc();
-
-    private String name, date, note;
 
     private File root = android.os.Environment.getExternalStorageDirectory();
     private String rootPath = root.toString();
@@ -66,7 +63,7 @@ public class EditLogFragment extends Fragment implements RapidFloatingActionCont
     private UploadTask uploadTask;
 
 
-    public EditLogFragment() {
+    public AppendNoteFragment() {
         // Required empty public constructor
     }
 
@@ -76,11 +73,11 @@ public class EditLogFragment extends Fragment implements RapidFloatingActionCont
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment EditLogFragment.
+     * @return A new instance of fragment AppendNoteFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static EditLogFragment newInstance(String param1, String param2) {
-        EditLogFragment fragment = new EditLogFragment();
+    public static AppendNoteFragment newInstance(String param1, String param2) {
+        AppendNoteFragment fragment = new AppendNoteFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -91,44 +88,24 @@ public class EditLogFragment extends Fragment implements RapidFloatingActionCont
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_log, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_append_note, container, false);
         View view = binding.getRoot();
 
-        final Context context  = getContext();
 
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReferenceFromUrl("gs://fitlogalpha.appspot.com/LogContainer");
 
-        binding.btnToggle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                binding.expandableTextView.setInterpolator(new OvershootInterpolator());
-
-                if (binding.expandableTextView.isExpanded())
-                {
-                    binding.expandableTextView.collapse();
-                }
-                else
-                {
-                    binding.expandableTextView.expand();
-                }
-
-            }
-        });
+        final Context context  = getContext();
 
         rfaLayout = binding.activityLogRfal;
         rfaBtn = binding.activityLogRfab;
@@ -140,16 +117,9 @@ public class EditLogFragment extends Fragment implements RapidFloatingActionCont
         items.add(new RFACLabelItem<Integer>().setLabel("Append")
                 .setResId(R.mipmap.ic_launcher)
                 .setWrapper(1));
-
         items.add(new RFACLabelItem<Integer>().setLabel("Upload")
                 .setResId(R.mipmap.ic_launcher)
                 .setWrapper(2));
-        items.add(new RFACLabelItem<Integer>().setLabel("View")
-                .setResId(R.mipmap.ic_launcher)
-                .setWrapper(3));
-        items.add(new RFACLabelItem<Integer>().setLabel("Clear")
-                .setResId(R.mipmap.ic_launcher)
-                .setWrapper(4));
 
 
         rfaContent
@@ -165,26 +135,36 @@ public class EditLogFragment extends Fragment implements RapidFloatingActionCont
                 rfaBtn,
                 rfaContent
         ).build();
+
+
         return view;
     }
 
     @Override
     public void onRFACItemLabelClick(int position, RFACLabelItem item) {
-        switch(item.getLabel()){
+        switch (item.getLabel()){
             case "Append":
-
-                new ChooserDialog().with(getContext())
+                new ChooserDialog().with(getActivity())
                         .withStartFile((rootPath))
                         .withChosenListener(new ChooserDialog.Result() {
                             @Override
                             public void onChoosePath(String path, File pathFile) {
 
-                               String date = binding.lazyDatePicker.getDate().toString()+"\n";
-                               String note = binding.edttxtNotes.getText().toString()+"\n";
-                               String append = date + note;
-                               heyump.appendFile(pathFile, append);
+                                String selectedDate = binding.simpleDatePicker.getDayOfMonth()+""+binding.simpleDatePicker.getMonth()+""+binding.simpleDatePicker.getYear();
+                                String note = binding.txtNt.getText().toString();
 
 
+                                if (TextUtils.isEmpty(binding.txtNt.getText())|| TextUtils.isEmpty(selectedDate)){
+                                    Toast toast1 = Toast.makeText(getActivity(), "Please enter the appropriate data", Toast.LENGTH_LONG);
+                                    toast1.show();
+                                } else {
+
+                                    String appendedNote = selectedDate + "\n" + note;
+
+                                    heyump.appendFile(pathFile, appendedNote);
+
+                                    Toast.makeText(getActivity(), "Success!!!", Toast.LENGTH_SHORT).show();
+                                }
                             }
                         })
                         .build()
@@ -194,51 +174,20 @@ public class EditLogFragment extends Fragment implements RapidFloatingActionCont
                 break;
 
             case "Upload":
-
-                new ChooserDialog().with(getContext())
+                new ChooserDialog().with(getActivity())
                         .withStartFile((rootPath))
                         .withChosenListener(new ChooserDialog.Result() {
                             @Override
                             public void onChoosePath(String path, File pathFile) {
-
 
                                 fireBaseUpload(path, pathFile.getName());
-
-                            }
-                        })
-                        .build()
-                        .show();
-
-
-                break;
-
-            case "View":
-
-                new ChooserDialog().with(getContext())
-                        .withStartFile((rootPath))
-                        .withChosenListener(new ChooserDialog.Result() {
-                            @Override
-                            public void onChoosePath(String path, File pathFile) {
-
-                                String s = heyump.readFile(pathFile);
-
-                                binding.expandableTextView.setText(s);
-
-
                             }
                         })
                         .build()
                         .show();
                 break;
-
-            case "Clear":
-                binding.expandableTextView.setText("");
-                binding.edttxtNotes.clearComposingText();
-                binding.lazyDatePicker.clear();
-
-                break;
-
         }
+
     }
 
     @Override
@@ -263,9 +212,22 @@ public class EditLogFragment extends Fragment implements RapidFloatingActionCont
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                Toast toast = Toast.makeText(getContext(), "Nope", Toast.LENGTH_LONG);
+                toast.show();
 
             }
         });
 
     }
+
+    private class Async1 extends NotesServices {
+
+
+        public Async1(Context context, Notes notes) {
+            super(context, notes);
+        }
+
+
+    }
+
 }

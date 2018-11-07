@@ -5,9 +5,11 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.anameplease.fitlogalpha.databinding.FragmentUpperMaxBinding;
 import com.obsez.android.lib.filechooser.ChooserDialog;
@@ -129,11 +131,16 @@ public class UpperMaxFragment extends Fragment implements RapidFloatingActionCon
         switch(item.getLabel()){
             case "Calculate":
 
-                Double answ = Double.valueOf(binding.editText2.getText().toString());
-                String s = heyump.upperCalc(answ, getContext());
+                if (TextUtils.isEmpty(binding.editText2.getText())){
+                    Toast toast1 = Toast.makeText(getContext(), "Please enter the appropriate data", Toast.LENGTH_LONG);
+                    toast1.show();
+                } else {
 
-                binding.txtvwLog.setText(s);
+                    Double answ = Double.valueOf(binding.editText2.getText().toString());
+                    String s = heyump.upperCalc(answ, getContext());
 
+                    binding.txtvwLog.setText(s);
+                }
 
                 break;
 

@@ -3,23 +3,14 @@ package com.example.anameplease.fitlogalpha;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.databinding.InverseBindingAdapter;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.anameplease.fitlogalpha.databinding.FragmentNewLogBinding;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
+import com.example.anameplease.fitlogalpha.databinding.FragmentViewTxtBinding;
 import com.obsez.android.lib.filechooser.ChooserDialog;
 import com.wangjie.rapidfloatingactionbutton.RapidFloatingActionButton;
 import com.wangjie.rapidfloatingactionbutton.RapidFloatingActionHelper;
@@ -35,10 +26,10 @@ import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link NewLogFragment#newInstance} factory method to
+ * Use the {@link ViewTXTFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NewLogFragment extends Fragment implements RapidFloatingActionContentLabelList.OnRapidFloatingActionContentLabelListListener{
+public class ViewTXTFragment extends Fragment implements RapidFloatingActionContentLabelList.OnRapidFloatingActionContentLabelListListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -48,29 +39,18 @@ public class NewLogFragment extends Fragment implements RapidFloatingActionConte
     private String mParam1;
     private String mParam2;
 
+    private FragmentViewTxtBinding binding;
 
     private RapidFloatingActionLayout rfaLayout;
     private RapidFloatingActionButton rfaBtn;
     private RapidFloatingActionHelper rfabHelper;
 
-    private boolean answ;
-
-    private FirebaseStorage storage;
-    private StorageReference storageReference;
-    private StorageReference uploadReference;
-    private UploadTask uploadTask;
-
-    private FragmentNewLogBinding binding;
-
     private appFunc heyump = new appFunc();
-
-    private String name, date, note;
 
     private File root = android.os.Environment.getExternalStorageDirectory();
     private String rootPath = root.toString();
 
-
-    public NewLogFragment() {
+    public ViewTXTFragment() {
         // Required empty public constructor
     }
 
@@ -80,11 +60,11 @@ public class NewLogFragment extends Fragment implements RapidFloatingActionConte
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment NewLogFragment.
+     * @return A new instance of fragment ViewTXTFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static NewLogFragment newInstance(String param1, String param2) {
-        NewLogFragment fragment = new NewLogFragment();
+    public static ViewTXTFragment newInstance(String param1, String param2) {
+        ViewTXTFragment fragment = new ViewTXTFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -99,38 +79,30 @@ public class NewLogFragment extends Fragment implements RapidFloatingActionConte
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_new_log, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_view_txt, container, false);
         View view = binding.getRoot();
-
 
         final Context context  = getContext();
 
         rfaLayout = binding.activityLogRfal;
         rfaBtn = binding.activityLogRfab;
 
-        storage = FirebaseStorage.getInstance();
-        storageReference = storage.getReferenceFromUrl("gs://fitlogalpha.appspot.com/LogContainer");
-
         RapidFloatingActionContentLabelList rfaContent = new RapidFloatingActionContentLabelList(context);
         rfaContent.setOnRapidFloatingActionContentLabelListListener(this);
         List<RFACLabelItem> items = new ArrayList<>();
 
-        items.add(new RFACLabelItem<Integer>().setLabel("Save")
+        items.add(new RFACLabelItem<Integer>().setLabel("Open")
                 .setResId(R.mipmap.ic_launcher)
                 .setWrapper(1));
-
-        items.add(new RFACLabelItem<Integer>().setLabel("Upload")
+        items.add(new RFACLabelItem<Integer>().setLabel("Toggle")
                 .setResId(R.mipmap.ic_launcher)
-                .setWrapper(2));
+                .setWrapper(1));
 
 
         rfaContent
@@ -147,70 +119,48 @@ public class NewLogFragment extends Fragment implements RapidFloatingActionConte
                 rfaContent
         ).build();
 
+
+
         return view;
     }
 
     @Override
     public void onRFACItemLabelClick(int position, RFACLabelItem item) {
-
-        switch(item.getLabel()){
-            case "Save":
-                name = "Log " +binding.editText3.getText().toString();
-                date = "\n"+binding.lazyDatePicker.getDate().toString()+"\n";
-                note = binding.edttxtNotes1.getText().toString()+"\n";
-                heyump.writeToSDFile(name, date, note, name, root);
-
-                break;
-
-            case "Upload":
-
-                new ChooserDialog().with(getContext())
+        switch (item.getLabel()){
+            case "Open":
+                new ChooserDialog().with(getActivity())
                         .withStartFile((rootPath))
                         .withChosenListener(new ChooserDialog.Result() {
                             @Override
                             public void onChoosePath(String path, File pathFile) {
 
-                                fireBaseUpload(path, pathFile.getName());
+
+                                String s = heyump.readFile(pathFile);
+                                binding.expandableTextView.setText(s);
+
 
                             }
                         })
                         .build()
                         .show();
-
-
                 break;
 
-
+            case "Toggle":
+                if (binding.expandableTextView.isExpanded())
+                {
+                    binding.expandableTextView.collapse();
+                }
+                else
+                {
+                    binding.expandableTextView.expand();
+                }
+             break;
         }
+
     }
 
     @Override
     public void onRFACItemIconClick(int position, RFACLabelItem item) {
-
-    }
-
-    public void fireBaseUpload (String path, String FileName){
-        File file = new File(path);
-
-
-        uploadReference = storageReference.child(FileName);
-
-        uploadTask= uploadReference.putFile(Uri.fromFile(file));
-
-        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast toast = Toast.makeText(getContext(), "Success!!!", Toast.LENGTH_LONG);
-                toast.show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast toast = Toast.makeText(getContext(), "Nope", Toast.LENGTH_LONG);
-                toast.show();
-
-            }
-        });
 
     }
 }

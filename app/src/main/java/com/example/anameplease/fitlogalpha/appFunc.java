@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
@@ -25,6 +26,7 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 
 import static android.support.constraint.Constraints.TAG;
 
@@ -178,11 +180,33 @@ public class appFunc {
         return bm;
     }
 
-    public void conCat(String data, Notes notes){
+    public void conCat(String data, Notes notes, Context context){
 
-        String myConcatedString = notes.getNote().concat("\n").concat(data);
+        if(data == null){
 
-        notes.setNote(myConcatedString);
+            Toast toast = Toast.makeText(context.getApplicationContext(), "Please enter some data", Toast.LENGTH_LONG);
+            toast.show();
+
+
+        } else {
+
+            String myConcatedString = notes.getNote().concat("\n").concat(data);
+
+            notes.setNote(myConcatedString);
+        }
+    }
+
+    public ArrayList<String> GetFiles() {
+        ArrayList<String> MyFiles = new ArrayList<>();
+
+        String path = Environment.getExternalStorageDirectory().toString();
+        File directory = new File(path);
+        File[] files = directory.listFiles();
+        for (int i = 0; i < files.length; i++)
+        {
+            MyFiles.add(files[i].getName());
+        }
+        return MyFiles;
     }
 
 

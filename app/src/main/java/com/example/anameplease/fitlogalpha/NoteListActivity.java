@@ -2,6 +2,7 @@ package com.example.anameplease.fitlogalpha;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -9,21 +10,22 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.example.anameplease.fitlogalpha.databinding.ActivityNoteListBinding;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
-import java.io.IOException;
+import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import static android.view.View.*;
 
 public class NoteListActivity extends AppCompatActivity {
 
@@ -31,14 +33,30 @@ public class NoteListActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<Notes> list = new ArrayList<>();
-    private OnItemClickListener listener;
+    private File root = android.os.Environment.getExternalStorageDirectory();
+    private String rootPath = root.toString();
+
+    private appFunc heyump = new appFunc();
+
+    private FirebaseStorage storage;
+    private StorageReference storageReference;
+    private StorageReference uploadReference;
+    private UploadTask uploadTask;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_note_list);
 
+        final Context context  = getApplicationContext();
+
+
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReferenceFromUrl("gs://fitlogalpha.appspot.com/LogContainer");
+
         binding.recyclerView.setHasFixedSize(true);
+
 
         List<Notes> init = initNotes();
 
@@ -50,22 +68,22 @@ public class NoteListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(Notes item) {
 
-               new Async1(getApplicationContext()).appendData(getApplicationContext(), binding.edttxtAppend.getText().toString(), item);
+                if (TextUtils.isEmpty(binding.edttxtAppend.getText())){
+                    Toast toast1 = Toast.makeText(getApplicationContext(), "Please enter the appropiate data", Toast.LENGTH_LONG);
+                    toast1.show();
+                } else {
 
-                Toast.makeText(getApplicationContext(), item.getNote(), Toast.LENGTH_LONG).show();
+                new Async1(getApplicationContext()).appendData(getApplicationContext(), binding.edttxtAppend.getText().toString(), item);
 
                 mAdapter.notifyDataSetChanged();
+                }
+
 
             }
+
         });
 
         binding.recyclerView.setAdapter(mAdapter);
-
-        Toolbar toolbar = binding.toolbar4;
-        setSupportActionBar(toolbar);
-
-
-
 
         ItemTouchHelper helper =  new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT ) {
             @Override
@@ -81,16 +99,17 @@ public class NoteListActivity extends AppCompatActivity {
                 Notes notessss = ((NotesAdapter) mAdapter).getNoteAtPosition(position1);
 
                 Toast.makeText(getApplicationContext(), "Deleting " +
-                        notessss.getNote(), Toast.LENGTH_LONG).show();
+                        notessss.getName(), Toast.LENGTH_LONG).show();
 
                 new Async1(getApplicationContext()).deleteNote(notessss);
 
                 Toast.makeText(getApplicationContext(), "Deleted " +
-                        notessss.getNote(), Toast.LENGTH_LONG).show();
+                        notessss.getName(), Toast.LENGTH_LONG).show();
             }
         });
 
         helper.attachToRecyclerView(binding.recyclerView);
+
 
 
     }
@@ -107,19 +126,14 @@ public class NoteListActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
-        return true;
+
+        return false;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home:
 
-            default:
                 return onOptionsItemSelected(item);
-        }
     }
 
     @Override
@@ -127,6 +141,32 @@ public class NoteListActivity extends AppCompatActivity {
         super.onBackPressed();
         overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.fade_out);
     }
+
+    public void fireBaseUpload (String path, String FileName){
+        File file = new File(path);
+
+
+        uploadReference = storageReference.child(FileName);
+
+        uploadTask= uploadReference.putFile(Uri.fromFile(file));
+
+        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Toast toast = Toast.makeText(getApplicationContext(), "Success!!!", Toast.LENGTH_LONG);
+                toast.show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast toast = Toast.makeText(getApplicationContext(), "Nope", Toast.LENGTH_LONG);
+                toast.show();
+
+            }
+        });
+
+    }
+
 
     private class Async1 extends NotesServices{
 
@@ -143,6 +183,7 @@ public class NoteListActivity extends AppCompatActivity {
         @Override
         protected Notes doInBackground(Notes... notes) {
             db.notesDao().delete(notes[0]);
+
             return super.doInBackground(notes);
         }
     }

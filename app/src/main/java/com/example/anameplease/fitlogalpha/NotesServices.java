@@ -3,13 +3,11 @@ package com.example.anameplease.fitlogalpha;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.DatePicker;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class NotesServices extends AsyncTask<Notes, Void, Notes> {
 
@@ -21,6 +19,8 @@ public class NotesServices extends AsyncTask<Notes, Void, Notes> {
 
     private Notes newnote;
     private appFunc func = new appFunc();
+    private File root = android.os.Environment.getExternalStorageDirectory();
+    private String rootPath = root.toString();
 
 
     public  NotesServices(Context context){
@@ -64,9 +64,25 @@ public class NotesServices extends AsyncTask<Notes, Void, Notes> {
     }
 
     public void appendData(Context context, String data, Notes item){
-        func.conCat(data, item);
+        func.conCat(data, item, context);
         db.notesDao().updateNote(item);
-        Toast.makeText(context.getApplicationContext(), item.getNote(), Toast.LENGTH_LONG).show();
+        Toast.makeText(context.getApplicationContext(), item.getName()+" has been appended.", Toast.LENGTH_LONG).show();
+    }
+
+    public void writeToSD(String n, String d, String nts, String FileName, File root, Context context ){
+        func.writeToSDFile(n,d,nts, FileName, root);
+        Toast.makeText(context.getApplicationContext(), "Log File Created.", Toast.LENGTH_LONG).show();
+    }
+
+    public void appendToSD(File FileName, String data, Context context){
+        func.appendFile(FileName, data);
+        Toast.makeText(context.getApplicationContext(), "Log File Appended.", Toast.LENGTH_LONG).show();
+    }
+
+    public List<Notes> getAllByID(Integer id){
+        List<Notes> allByID = db.notesDao().getAllByID(id);
+
+        return allByID;
     }
 
     public void deleteNote(Notes item){
@@ -83,12 +99,20 @@ public class NotesServices extends AsyncTask<Notes, Void, Notes> {
     @Override
     protected Notes doInBackground(Notes... notes) {
 
+
+
         db.notesDao().insert(notes[0]);
 
         Notes notes1 = db.notesDao().searchByID(id);
 
 
         return notes1;
+    }
+
+    public ArrayList<String> getFiles(){
+        ArrayList<String> getFiles = func.GetFiles();
+
+        return getFiles;
     }
 }
 

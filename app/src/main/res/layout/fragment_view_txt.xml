@@ -2,59 +2,23 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".NewLogFragment">
+    tools:context=".ViewTXTFragment">
 <FrameLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <!-- TODO: Update blank fragment layout -->
 
-    <LinearLayout
+    <at.blogc.android.views.ExpandableTextView
+        android:id="@+id/expandableTextView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="292dp"
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="New Log"
-            android:textAlignment="center"
-            android:textSize="30sp"
-            android:textStyle="bold|italic" />
-
-        <EditText
-            android:id="@+id/editText3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Log Name"
-            android:inputType="text"
-            android:textAlignment="center" />
-
-        <com.mikhaellopez.lazydatepicker.LazyDatePicker
-            android:id="@+id/lazyDatePicker"
-            android:layout_width="match_parent"
-            android:layout_height="29dp"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toTopOf="@+id/expandableTextView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/richEditor"
-            app:ldp_date_format="mm-dd-yyyy">
-
-        </com.mikhaellopez.lazydatepicker.LazyDatePicker>
-
-        <EditText
-            android:id="@+id/edttxtNotes1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Notes"
-            android:inputType="textMultiLine"
-            android:textAlignment="center" />
-
-    </LinearLayout>
+        android:ellipsize="end"
+        android:maxLines="5"
+        android:textAlignment="center"
+        app:animation_duration="750"
+        tools:text="Log wil appear here" />
 
     <com.wangjie.rapidfloatingactionbutton.RapidFloatingActionLayout xmlns:rfal="http://schemas.android.com/apk/res-auto"
         android:id="@+id/activity_log_rfal"
@@ -85,7 +49,5 @@
 
     </com.wangjie.rapidfloatingactionbutton.RapidFloatingActionLayout>
 
-
-
-</FrameLayout>
-</layout>
+</FrameLayout
+    ></layout>

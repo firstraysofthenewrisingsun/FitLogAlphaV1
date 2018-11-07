@@ -56,6 +56,12 @@ public class MainActivity extends AppCompatActivity {
                         Intent intent6 = new Intent(MainActivity.this, LogCreator.class);
                         startActivity(intent6);
                         return true;
+                    case R.id.txtLog1:
+                        Intent intent7 = new Intent(MainActivity.this, TXTLogActivity.class);
+                        startActivity(intent7);
+                        return true;
+
+
                 }
 
 

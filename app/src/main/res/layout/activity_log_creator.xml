@@ -6,7 +6,8 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:isScrollContainer="false">
 
 
         <android.support.v7.widget.Toolbar
@@ -52,9 +53,11 @@
 
             <DatePicker
                 android:id="@+id/simpleDatePicker"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:calendarViewShown="false"
                 android:datePickerMode="spinner" />
+
 
             <EditText
                 android:id="@+id/txtID"
@@ -74,12 +77,35 @@
                 android:inputType="textMultiLine"
                 android:textAlignment="center" />
 
-            <Button
-                android:id="@+id/btnAdd"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Add" />
-
         </LinearLayout>
+
+        <com.wangjie.rapidfloatingactionbutton.RapidFloatingActionLayout xmlns:rfal="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/activity_log_rfal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            rfal:layout_constraintBottom_toBottomOf="parent"
+            rfal:layout_constraintEnd_toEndOf="parent"
+            rfal:layout_constraintStart_toStartOf="parent"
+            rfal:layout_constraintTop_toTopOf="parent"
+            rfal:rfal_frame_alpha="1"
+            rfal:rfal_frame_color="#01ffffff">
+
+            <com.wangjie.rapidfloatingactionbutton.RapidFloatingActionButton xmlns:rfab="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/activity_log_rfab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="14dp"
+                android:padding="8dp"
+                rfab:rfab_color_normal="#FC7A60"
+                rfab:rfab_drawable="@drawable/rfab__drawable_rfab_default"
+                rfab:rfab_shadow_color="#ffffff00"
+                rfab:rfab_shadow_dx="5dp"
+                rfab:rfab_shadow_dy="5dp"
+                rfab:rfab_shadow_radius="7dp"
+                rfab:rfab_size="normal" />
+
+        </com.wangjie.rapidfloatingactionbutton.RapidFloatingActionLayout>
     </android.support.constraint.ConstraintLayout>
 </layout>
