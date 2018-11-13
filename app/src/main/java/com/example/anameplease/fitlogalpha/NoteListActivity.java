@@ -14,20 +14,29 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
+import com.android.dbexporterlibrary.ExportDbUtil;
 import com.example.anameplease.fitlogalpha.databinding.ActivityNoteListBinding;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.obsez.android.lib.filechooser.ChooserDialog;
+import com.wangjie.rapidfloatingactionbutton.RapidFloatingActionButton;
+import com.wangjie.rapidfloatingactionbutton.RapidFloatingActionHelper;
+import com.wangjie.rapidfloatingactionbutton.RapidFloatingActionLayout;
+import com.wangjie.rapidfloatingactionbutton.contentimpl.labellist.RFACLabelItem;
+import com.wangjie.rapidfloatingactionbutton.contentimpl.labellist.RapidFloatingActionContentLabelList;
+import com.wangjie.rapidfloatingactionbutton.util.RFABTextUtil;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NoteListActivity extends AppCompatActivity {
+public class NoteListActivity extends AppCompatActivity implements RapidFloatingActionContentLabelList.OnRapidFloatingActionContentLabelListListener{
 
     private ActivityNoteListBinding binding;
     private RecyclerView.Adapter mAdapter;
@@ -43,6 +52,10 @@ public class NoteListActivity extends AppCompatActivity {
     private StorageReference uploadReference;
     private UploadTask uploadTask;
 
+    private RapidFloatingActionLayout rfaLayout;
+    private RapidFloatingActionButton rfaBtn;
+    private RapidFloatingActionHelper rfabHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +63,34 @@ public class NoteListActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_note_list);
 
         final Context context  = getApplicationContext();
+
+        rfaLayout = binding.activityLogRfal;
+        rfaBtn = binding.activityLogRfab;
+
+        RapidFloatingActionContentLabelList rfaContent = new RapidFloatingActionContentLabelList(context);
+        rfaContent.setOnRapidFloatingActionContentLabelListListener(this);
+        List<RFACLabelItem> items = new ArrayList<>();
+
+        items.add(new RFACLabelItem<Integer>().setLabel("Append Log")
+                .setResId(R.mipmap.ic_launcher)
+                .setWrapper(1));
+        items.add(new RFACLabelItem<Integer>().setLabel("Upload")
+                .setResId(R.mipmap.ic_launcher)
+                .setWrapper(2));
+
+        rfaContent
+                .setItems(items)
+                .setIconShadowRadius(RFABTextUtil.dip2px(context, 5))
+                .setIconShadowColor(0xff888888)
+                .setIconShadowDy(RFABTextUtil.dip2px(context, 5))
+        ;
+
+        rfabHelper = new RapidFloatingActionHelper(
+                context,
+                rfaLayout,
+                rfaBtn,
+                rfaContent
+        ).build();
 
 
         storage = FirebaseStorage.getInstance();
@@ -68,19 +109,31 @@ public class NoteListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(Notes item) {
 
-                if (TextUtils.isEmpty(binding.edttxtAppend.getText())){
+                if (TextUtils.isEmpty(binding.edttxtAppend.getText())) {
                     Toast toast1 = Toast.makeText(getApplicationContext(), "Please enter the appropiate data", Toast.LENGTH_LONG);
                     toast1.show();
                 } else {
 
-                new Async1(getApplicationContext()).appendData(getApplicationContext(), binding.edttxtAppend.getText().toString(), item);
+                    int month = binding.simpleDatePicker.getMonth() + 1;
+                    String selectedDate = binding.simpleDatePicker.getDayOfMonth()+""+month+""+binding.simpleDatePicker.getYear();
+                    new Async1(getApplicationContext()).appendData(getApplicationContext(), selectedDate+"\n"+binding.edttxtAppend.getText().toString(), item);
 
-                mAdapter.notifyDataSetChanged();
+                    mAdapter.notifyDataSetChanged();
+
+
+
                 }
-
 
             }
 
+        }, new ItemLongClickListener() {
+            @Override
+            public void onItemLongClick(Notes item) {
+
+                new Async1(getApplicationContext()).writeDBToSD(getApplicationContext(), binding.edttxtAppend.getText().toString()+".csv");
+
+                Toast.makeText(getApplicationContext(), "CSV created", Toast.LENGTH_LONG).show();
+            }
         });
 
         binding.recyclerView.setAdapter(mAdapter);
@@ -164,6 +217,53 @@ public class NoteListActivity extends AppCompatActivity {
 
             }
         });
+
+    }
+
+    @Override
+    public void onRFACItemLabelClick(int position, RFACLabelItem item) {
+        switch (item.getLabel()){
+            case "Append Log":
+                new ChooserDialog().with(this)
+                        .withStartFile((rootPath))
+                        .withChosenListener(new ChooserDialog.Result() {
+                            @Override
+                            public void onChoosePath(String path, File pathFile) {
+
+                                if (TextUtils.isEmpty(binding.edttxtAppend.getText())){
+                                    Toast toast1 = Toast.makeText(getApplicationContext(), "Please enter the appropiate data", Toast.LENGTH_LONG);
+                                    toast1.show();
+                                } else {
+
+                                    String data = binding.edttxtAppend.getText().toString();
+                                    new Async1(getApplicationContext()).appendToSD(pathFile, binding.edttxtAppend.getText().toString(), getApplicationContext());
+
+                                }
+                            }
+                        })
+                        .build()
+                        .show();
+                break;
+            case "Upload":
+                new ChooserDialog().with(this)
+                        .withStartFile((rootPath))
+                        .withChosenListener(new ChooserDialog.Result() {
+                            @Override
+                            public void onChoosePath(String path, File pathFile) {
+
+                                fireBaseUpload(path,pathFile.getName());
+                            }
+                        })
+                        .build()
+                        .show();
+                break;
+
+        }
+
+    }
+
+    @Override
+    public void onRFACItemIconClick(int position, RFACLabelItem item) {
 
     }
 

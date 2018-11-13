@@ -9,16 +9,32 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <at.blogc.android.views.ExpandableTextView
-        android:id="@+id/expandableTextView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="292dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        android:ellipsize="end"
-        android:maxLines="5"
-        android:textAlignment="center"
-        app:animation_duration="750"
-        tools:text="Log wil appear here" />
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="View Excel"
+            android:textAlignment="center"
+            android:textSize="30sp"
+            android:textStyle="bold|italic" />
+
+        <at.blogc.android.views.ExpandableTextView
+            android:id="@+id/expandableTextView"
+            android:layout_width="match_parent"
+            android:layout_height="273dp"
+
+            android:ellipsize="end"
+            android:maxLines="5"
+            android:textAlignment="center"
+            app:animation_duration="750"
+            tools:text="Log wil appear here" />
+
+    </LinearLayout>
 
     <com.wangjie.rapidfloatingactionbutton.RapidFloatingActionLayout xmlns:rfal="http://schemas.android.com/apk/res-auto"
         android:id="@+id/activity_log_rfal"

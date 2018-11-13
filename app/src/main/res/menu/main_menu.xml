@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/hme"
-        android:title="Home" />
+        android:id="@+id/menuviewExcel"
+        android:title="View Excel" />
 
     <!-- Settings, should always be in the overflow -->
 

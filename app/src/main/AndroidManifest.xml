@@ -26,16 +26,20 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.anameplease.fitlogalpha.MainActivity" />
         </activity>
-        <activity android:name=".MaxEstimateActivity"
-            android:windowSoftInputMode="adjustResize"/>
+        <activity
+            android:name=".MaxEstimateActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".FitUtilActivity" />
-        <activity android:name=".NoteListActivity"
-            android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".LogCreator"
-            android:windowSoftInputMode="adjustResize"/>
+        <activity
+            android:name=".NoteListActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".LogCreator"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".TXTLogActivity"
             android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".DBViewActivity"></activity>
     </application>
 
 </manifest>

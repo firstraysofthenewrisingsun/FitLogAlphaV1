@@ -1,6 +1,7 @@
 package com.example.anameplease.fitlogalpha;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import com.wangjie.rapidfloatingactionbutton.util.RFABTextUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class LogCreator extends AppCompatActivity implements RapidFloatingActionContentLabelList.OnRapidFloatingActionContentLabelListListener{
@@ -80,14 +82,9 @@ public class LogCreator extends AppCompatActivity implements RapidFloatingAction
         items.add(new RFACLabelItem<Integer>().setLabel("Add")
                 .setResId(R.mipmap.ic_launcher)
                 .setWrapper(1));
-
-        items.add(new RFACLabelItem<Integer>().setLabel("Save")
+        items.add(new RFACLabelItem<Integer>().setLabel("View Log")
                 .setResId(R.mipmap.ic_launcher)
                 .setWrapper(2));
-        items.add(new RFACLabelItem<Integer>().setLabel("Upload")
-                .setResId(R.mipmap.ic_launcher)
-                .setWrapper(3));
-
 
         rfaContent
                 .setItems(items)
@@ -107,18 +104,6 @@ public class LogCreator extends AppCompatActivity implements RapidFloatingAction
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        return false;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        return onOptionsItemSelected(item);
-    }
-
-    @Override
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.fade_out);
@@ -128,53 +113,16 @@ public class LogCreator extends AppCompatActivity implements RapidFloatingAction
     public void onRFACItemLabelClick(int position, RFACLabelItem item) {
         switch (item.getLabel()){
 
-            case "Save":
 
-                String selectedDate1 = binding.simpleDatePicker.getDayOfMonth()+"/"+(binding.simpleDatePicker.getMonth()+1)+"/"+binding.simpleDatePicker.getYear();
-                if ( TextUtils.isEmpty(binding.txtNm.getText()) || (binding.simpleDatePicker.getYear() == 0) || TextUtils.isEmpty(binding.txtNt.getText()) || (binding.simpleDatePicker.getMonth() == 0) || (binding.simpleDatePicker.getDayOfMonth() == 0)){
-                    Toast toast1 = Toast.makeText(getApplicationContext(), "Please enter the appropriate data", Toast.LENGTH_LONG);
-                    toast1.show();
-                } else {
-                    heyump.writeToSDFile(binding.txtNm.getText().toString(), selectedDate1, binding.txtNt.getText().toString(), "Log " + binding.txtNm.getText().toString(), root);
-
-                    Toast toast1 = Toast.makeText(getApplicationContext(), "Log Created!!! "+binding.txtNm.getText().toString()+" "+binding.txtID.getText().toString(), Toast.LENGTH_LONG);
-                    toast1.show();
-                }
-
-                break;
-            case "Upload":
-
-                new ChooserDialog().with(this)
-                        .withStartFile((rootPath))
-                        .withChosenListener(new ChooserDialog.Result() {
-                            @Override
-                            public void onChoosePath(String path, File pathFile) {
-
-                                fireBaseUpload(path, pathFile.getName());
-
-                            }
-                        })
-                        .build()
-                        .show();
-                break;
             case "Add":
 
 
                 Integer id = Integer.valueOf(binding.txtID.getText().toString());
-                try {
-                    List<Notes> notesList = new Async1(getApplicationContext()).getAllByID(id);
 
-                    for (int i = 0; i < notesList.size(); i++) {
-                        if (id == notesList.get(i).getId()) {
-                            id = new Integer(notesList.get(i).getId()+1);
-                            Toast toast1 = Toast.makeText(getApplicationContext(), "Duplicate ID caught. New ID: "+id, Toast.LENGTH_LONG);
-                            toast1.show();
-                        }
-                    }
-                } catch (android.database.sqlite.SQLiteConstraintException e){
-                    Toast toast1 = Toast.makeText(getApplicationContext(),"This"+e, Toast.LENGTH_LONG);
-                    toast1.show();
-                }
+                List<Notes> notesList = new Async1(getApplicationContext()).getAll();
+
+                int newid = newID(id, notesList);
+
 
 
 
@@ -191,15 +139,21 @@ public class LogCreator extends AppCompatActivity implements RapidFloatingAction
                     toast1.show();
                 } else {
 
-                    noteToInsert  = new Notes(id, name, date, note);
+                    noteToInsert  = new Notes(newid, name, date, note);
 
                     new Async1(getApplicationContext(), noteToInsert).execute(noteToInsert);
 
-                    Toast toast = Toast.makeText(getApplicationContext(), "Success!!! "+noteToInsert.getName()+" "+noteToInsert.getId(), Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(getApplicationContext(), "Success!!! "+noteToInsert.getName()+" "+noteToInsert.getId(), Toast.LENGTH_SHORT);
                     toast.show();
                 }
 
                 break;
+            case "View Log":
+                Intent intent5 = new Intent(LogCreator.this, DBViewActivity.class);
+                startActivity(intent5);
+                break;
+
+
 
         }
     }
@@ -234,6 +188,29 @@ public class LogCreator extends AppCompatActivity implements RapidFloatingAction
 
     }
 
+    public int newID(int ids, List<Notes> notesList1) {
+
+        int i = 0;
+        int newid = 0;
+        while (i < notesList1.size()) {
+            if (Objects.equals(ids, notesList1.get(i).getId()))
+                ids = notesList1.get(i).getId() + 1;
+
+            if (Objects.equals(ids, notesList1.get(i).getId())){
+
+                return newID(ids, notesList1);
+            } else {
+                 newid = ids;
+
+                Toast toast1 = Toast.makeText(getApplicationContext(), "Duplicate ID caught. New ID: "+newid, Toast.LENGTH_SHORT);
+                toast1.show();
+            }
+            i++;
+        }
+
+        return newid;
+    }
+
     private class Async1 extends NotesServices {
 
         public Async1(Context context){
@@ -245,6 +222,10 @@ public class LogCreator extends AppCompatActivity implements RapidFloatingAction
         }
 
     }
+    }
 
 
-}
+
+
+
+

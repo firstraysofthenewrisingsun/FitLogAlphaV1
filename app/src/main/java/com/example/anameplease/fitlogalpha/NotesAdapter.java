@@ -17,6 +17,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder
 
     private List<Notes> mDataset;
     private OnItemClickListener listener;
+    private ItemLongClickListener longClickListener;
 
 
     @NonNull
@@ -39,7 +40,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder
       myViewHolder.date.setText(String.valueOf(notes.getDate()));
       myViewHolder.note.setText(String.valueOf(notes.getNote()));
       myViewHolder.id.setText(String.valueOf(notes.getId()));
-      myViewHolder.bind(notes, listener);
+      myViewHolder.bind(notes, listener, longClickListener);
 
 
     }
@@ -77,7 +78,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder
 
 
 
-        public  void bind (final Notes item, final OnItemClickListener listener){
+        public  void bind (final Notes item, final OnItemClickListener listener, final ItemLongClickListener longClickListener){
 
             view.setOnClickListener(new OnClickListener() {
                 @Override
@@ -86,6 +87,13 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder
                 }
             });
 
+            view.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    longClickListener.onItemLongClick(item);
+                    return true;
+                }
+            });
 
         }
 
@@ -93,9 +101,10 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder
     }
 
 
-    public NotesAdapter(List<Notes> myDataset, OnItemClickListener listener){
+    public NotesAdapter(List<Notes> myDataset, OnItemClickListener listener, ItemLongClickListener longClickListener){
         this.mDataset = myDataset;
         this.listener = listener;
+        this.longClickListener = longClickListener;
     }
 
     public Notes getNoteAtPosition(int position){

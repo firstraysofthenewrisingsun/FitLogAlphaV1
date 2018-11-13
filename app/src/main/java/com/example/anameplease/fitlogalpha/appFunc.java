@@ -193,6 +193,7 @@ public class appFunc {
             String myConcatedString = notes.getNote().concat("\n").concat(data);
 
             notes.setNote(myConcatedString);
+
         }
     }
 
