@@ -4,13 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".LogCreator">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:isScrollContainer="false">
-
-
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -21,7 +19,8 @@
             app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            />
 
         <LinearLayout
             android:id="@+id/linearLayout2"
@@ -107,5 +106,7 @@
                 rfab:rfab_size="normal" />
 
         </com.wangjie.rapidfloatingactionbutton.RapidFloatingActionLayout>
-    </android.support.constraint.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

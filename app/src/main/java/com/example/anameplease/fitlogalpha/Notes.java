@@ -1,22 +1,21 @@
 package com.example.anameplease.fitlogalpha;
 
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.PrimaryKey;
-import android.support.annotation.NonNull;
-
-import java.io.File;
 import java.io.Serializable;
 
-@Entity (tableName = "notes")
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "notes")
 public class Notes implements Serializable {
 
 
-    @PrimaryKey (autoGenerate = true)
+    @PrimaryKey(autoGenerate = true)
     @NonNull
-    @ColumnInfo (name = "info_id")
+    @ColumnInfo(name = "info_id")
     private Integer id;
     @ColumnInfo (name = "info_name")
     private String name;

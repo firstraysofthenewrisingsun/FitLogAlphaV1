@@ -1,6 +1,5 @@
 package com.example.anameplease.fitlogalpha;
 
-import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.AsyncTask;
@@ -14,6 +13,8 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.room.Room;
 
 public class NotesServices extends AsyncTask<Notes, Void, Notes> implements ExporterListener {
 
